@@ -1,0 +1,36 @@
+build:
+  image: golang:1.5
+  commands:
+    - make deps
+    - make vet
+    - make build
+    - make test
+
+publish:
+  coverage:
+    when:
+      branch: master
+  docker:
+    username: $$DOCKER_USER
+    password: $$DOCKER_PASS
+    email: $$DOCKER_EMAIL
+    repo: plugins/drone-lambda
+    tag: latest
+    when:
+      branch: master
+  docker:
+    username: $$DOCKER_USER
+    password: $$DOCKER_PASS
+    email: $$DOCKER_EMAIL
+    repo: plugins/drone-lambda
+    tag: develop
+    when:
+      branch: develop
+
+plugin:
+  name: Lambda
+  desc: Deploy or update a project on AWS Lambda
+  type: deploy
+  image: plugins/drone-lambda
+  labels:
+    - aws
